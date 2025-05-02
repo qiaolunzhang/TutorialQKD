@@ -1,0 +1,53 @@
+data;
+
+set N := 1 2 3 4 5 6 7;
+
+set E := (1,2) (1,7) (2,3) (2,6) (2,7) (3,4) (3,6) (4,6) (4,5) (5,6) (6,7);
+
+# logical nodes names
+set Nl := a b c d e f aa bb cc dd ee ff;
+
+# number of virtual networks
+set nVN := 1 2 3 4;
+
+# node of the virtual networks
+set Nlog[1] := a b c; 
+set Nlog[2] := d e f;
+set Nlog[3] := aa bb cc; 
+set Nlog[4] := dd ee ff;
+
+# all the links of the logical topologies
+set El:= (a,b) (b,c) (d,e) (e,f) (aa,bb) (bb,cc) (dd,ee) (ee,ff);# (a,f) (c,d);
+
+# VNM
+
+# possible nodes that can assume each logical nodes
+set GEO[a] := 1;
+set GEO[b] := 2;
+set GEO[c] := 3;
+set GEO[d] := 4;
+set GEO[e] := 5;
+set GEO[f] := 6;
+set GEO[aa] := 1;
+set GEO[bb] := 2;
+set GEO[cc] := 3;
+set GEO[dd] := 4;
+set GEO[ee] := 5;
+set GEO[ff] := 7;
+
+# VNE 
+
+# possible nodes that can assume each logical nodes
+#set GEO[a] := 1 2;
+#set GEO[b] := 2 3;
+#set GEO[c] := 2 3 4 6;
+#set GEO[d] := 3 4;
+#set GEO[e] := 5 6;
+#set GEO[f] := 3 6 5;
+#set GEO[aa] := 1 2 7;
+#set GEO[bb] := 1 2 3;
+#set GEO[cc] := 2 3 4 6;
+#set GEO[dd] := 3 4;
+#set GEO[ee] := 5 6;
+#set GEO[ff] := 3 6 5;
+

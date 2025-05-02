@@ -1,0 +1,6 @@
+reset;
+
+model VNEActive.mod
+data VNEActive.dat
+option solver cplexamp;
+solve;

@@ -1,0 +1,29 @@
+# param objectiveValue;
+# param servedRateValue;
+# param servedQKPRateValue;
+# param usedKeysValue;
+# objective
+# var k_q{Ea, Ea_u, W, T}, >=0;
+
+let servedRateValue := (sum{(i,j) in R} y[i,j]) / (sum{(i,j) in R} 1);
+# let servedQKPRateValue := 0;
+# for {(s,d) in R} {
+#     if (y[s,d] < 1) then continue;
+
+#     if (r[s,d] > (sum{t in T} k_c[s,d,t] - sum{t in T} k_u[s,d,t])) then {
+#         let servedQKPRateValue := servedQKPRateValue + 1;
+#         continue;
+#     }
+
+#     for {(i,j) in Ea, w in W, t in T} {
+#         if (k_q[i,j,s,d,w,t] > 0) then {
+#             let servedQKPRateValue := servedQKPRateValue + 1;
+#             break;
+#         }
+#     }
+# }
+# let servedQKPRateValue := servedQKPRateValue / (sum{(i,j) in R} 1);
+# let usedKeysValue := sum{(i,j) in R} 0.1 * alpha1[i,j] * r[i,j] * y[i,j];
+let savedKeysValue := sum{(s,d) in P} g[s,d,T_max];
+let keyStoringRateValue := sum{(s,d) in P, t in T} (k[s,d,t] / (T_max+1));
+printf "%s, %s, %s, %s \n", ObjectiveServedRequest, servedRateValue, savedKeysValue, keyStoringRateValue >> ("results/module/Poliqi-case-" & case & "-module-" & C[1] & "-instance-" & instance & ".txt");

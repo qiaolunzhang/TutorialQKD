@@ -1,0 +1,99 @@
+reset;
+option solver cplex;
+# two days: 172800
+option cplex_options 'memoryemphasis 1 absmipgap=1 threads=8 timelimit=43200';
+suffix absmipgap OUT;
+
+#include StaticRWTA.mod;
+include StaticRWTAJSAC.mod;
+param objectiveValue;
+param servedRateValue;
+param servedQKPRateValue;
+param usedKeysValue;
+param savedKeysValue;
+param keyStoringRateValue;
+
+param tic_time default 0;
+param toc_time default 0;
+
+for {instance in 1..1} {
+for {case in 0..1 by 1} {
+for {module in 2..2} {
+    reset data;
+
+#include ../topology/data_file/initial_5_node.dat;
+# data ("../topology/data_file/initial_5_node_paper_" & case & ".dat");
+# data ("../topology/data_file/5_node/5_request/initial_5_node_paper_" & case & ".dat");
+data ("./data_file/PoliqiLarger/Poliqi_case_" & case & "/initial_paper_instance_" & instance & ".dat");
+# include PoliQi/PoliQi.dat;
+#include StaticRWTA3.dat;
+
+#param r{Ea_u} default 2;
+# for {(i,j) in Ea_u} {
+#     if (i = 3 and j = 4) then {
+#         let r[i,j] := 100;
+#     } else {
+#         let r[i,j] := 2;
+#     }
+# }
+
+for {i in Np} {
+let C[i] := module;
+}
+
+let tic_time := _solve_elapsed_time;
+# solve rwtaNoOBTRProblemSecond;
+solve rwtaNoOBTRProblem;
+let toc_time := _solve_elapsed_time;
+printf "Time: %s \n", toc_time - tic_time >> ("results/module/Poliqi-case-" & case & "-module-" & C[1] & "-instance-" & instance & ".txt");
+print solve_message >> ("results/module/Poliqi-case-" & case & "-module-" & C[1] & "-instance-" & instance & ".txt");
+display y;
+display g;
+printf "Case rwtaNoOBTRProblem\n" >> ("results/module/Poliqi-case-" & case & "-module-" & C[1] & "-instance-" & instance & ".txt");
+include testPoliqiWrite.run;
+
+let tic_time := _solve_elapsed_time;
+# solve rwtaOBProblemSecond;
+solve rwtaOBProblem;
+let toc_time := _solve_elapsed_time;
+printf "Time: %s \n", toc_time - tic_time >> ("results/module/Poliqi-case-" & case & "-module-" & C[1] & "-instance-" & instance & ".txt");
+print solve_message >> ("results/module/Poliqi-case-" & case & "-module-" & C[1] & "-instance-" & instance & ".txt");
+display y;
+display g;
+
+printf "Case rwtaOBProblem\n" >> ("results/module/Poliqi-case-" & case & "-module-" & C[1] & "-instance-" & instance & ".txt");
+include testPoliqiWrite.run;
+
+let tic_time := _solve_elapsed_time;
+# solve rwtaTRProblemSecond;
+solve rwtaTRProblem;
+let toc_time := _solve_elapsed_time;
+printf "Time: %s \n", toc_time - tic_time >> ("results/module/Poliqi-case-" & case & "-module-" & C[1] & "-instance-" & instance & ".txt");
+print solve_message >> ("results/module/Poliqi-case-" & case & "-module-" & C[1] & "-instance-" & instance & ".txt");
+display y;
+display g;
+printf "Case rwtaTRProblem\n" >> ("results/module/Poliqi-case-" & case & "-module-" & C[1] & "-instance-" & instance & ".txt");
+include testPoliqiWrite.run;
+
+let tic_time := _solve_elapsed_time;
+# solve rwtaProblemSecond;
+solve rwtaProblem;
+let toc_time := _solve_elapsed_time;
+printf "Time: %s \n", toc_time - tic_time >> ("results/module/Poliqi-case-" & case & "-module-" & C[1] & "-instance-" & instance & ".txt");
+print solve_message >> ("results/module/Poliqi-case-" & case & "-module-" & C[1] & "-instance-" & instance & ".txt");
+display y;
+display g;
+printf "Case rwtaProblem\n" >> ("results/module/Poliqi-case-" & case & "-module-" & C[1] & "-instance-" & instance & ".txt");
+include testPoliqiWrite.run;
+}
+}
+}
+# let Nt := {1, 3, 4, 5};
+# solve rwtaProblemPoliqi;
+# display y;
+# solve rwtaProblemNoRelay;
+# display y;
+# solve rwtaProblemNoBypass;
+# display y;
+# solve rwtaProblem;
+# display y;
